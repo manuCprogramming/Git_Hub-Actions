@@ -1,0 +1,42 @@
+name: Calculator
+on:
+    push
+
+jobs:
+    defineValues:
+        runs-on: ubuntu-latest
+        outputs:
+          C: ${{steps.CandD.outputs.C}}
+          D: ${{steps.CandD.outputs.D}}
+
+        steps:
+      
+          
+            - name: define A and B
+              run: |
+                a=2
+                b=0
+                echo "A=$a" >> "$GITHUB_ENV"
+                echo "B=$b" >> "$GITHUB_ENV"
+            - name: define C and D
+              id: CandD
+              run: |
+                c=4
+                d=2
+                echo "C=$c" >> "$GITHUB_OUPUT"
+                echo "D=$d" >> "$GITHUB_OUTPUT"
+            - name: Calculate sum and division
+              run: |
+
+                sum=$((A+B+${{steps.CandD.outputs.C}}+${{steps.CandD.outputs.D}}))
+                echo "SUM at job 1 = $sum"
+                division=$((${{steps.CandD.outputs.C}}/${{steps.CandD.outputs.D}}))
+                echo "Division at job 1 = $division"
+            
+    UseJOB1Values:
+      runs-on: ubuntu-latest
+      needs: defineValues
+      steps:
+        - name: UseCandD
+          run: |
+            echo '$((${{needs.defineValues.outputs.C}}/${{needs.defineValues.outputs.D}}))'
