@@ -39,4 +39,4 @@ jobs:
       steps:
         - name: UseCandD
           run: |
-            echo '$((${{needs.defineValues.outputs.C}}/${{needs.defineValues.outputs.D}}))'
+            echo $((${{needs.defineValues.outputs.C}}/${{needs.defineValues.outputs.D}}))
