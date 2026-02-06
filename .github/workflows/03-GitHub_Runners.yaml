@@ -1,5 +1,6 @@
 name: GitHub Runner
-on: push
+on: 
+   - push
 
 jobs:
     UbuntuEcho:
