@@ -7,11 +7,19 @@ on:
             debug:
                 type: boolean
                 default: false
-      
+env:
+    MY_AatWorkflow: 1
+    MY_BatWorkflow: 2  
+    MY_OverWritten: 'workflow' 
 
 jobs:
     echo-data:
         runs-on: ubuntu-latest
+        env:
+            MY_AatJob: 3
+            MY_BatJob: 4 
+            MY_OverWritten: 'job'  
+
         steps:
             - name: Display Information
               run: |
@@ -24,5 +32,12 @@ jobs:
             - name: Retrieve Variable
               run: |
                 echo "Variable value: ${{vars.MY_VAR}}"
+            - name: Retrieve Environment Variables
+              run: |
+                echo "$((${{env.MY_AatJob}}+${{env.MY_AatWorkflow}}))"
+                echo "$((${{env.MY_BatJob}}+${{env.MY_BatWorkflow}}))"
+            - name: Priority of ENV's
+              run: echo "${{env.MY_OverWritten}}"
+
 
   
