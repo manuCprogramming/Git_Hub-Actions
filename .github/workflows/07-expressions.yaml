@@ -14,7 +14,7 @@ jobs:
             - name: "[debug] print start-up data"
               if: ${{inputs.debug}} 
               run: |
-                exho 'triggered by :${{github.event_name}}\n Branch: ${{github.ref}}\n Commit SHA: ${{github.sha}}\n Runner OS: ${{runner.os}}'
+                echo 'triggered by :${{github.event_name}}\n Branch: ${{github.ref}}\n Commit SHA: ${{github.sha}}\n Runner OS: ${{runner.os}}'
             - name: "[debug] Print when triggered from main"
               if: ${{inputs.debug && github.ref=='refs/heads/main'}}
               run: echo "I waas triggere from main"
