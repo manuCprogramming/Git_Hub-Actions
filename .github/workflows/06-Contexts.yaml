@@ -33,7 +33,10 @@ jobs:
               run: |
                 echo "Variable value: ${{vars.MY_VAR}}"
             - name: Retrieve Environment Variables
+              env:
+                MY_OverWritten: 'step'
               run: |
+
                 echo "$((${{env.MY_AatJob}}+${{env.MY_AatWorkflow}}))"
                 echo "$((${{env.MY_BatJob}}+${{env.MY_BatWorkflow}}))"
             - name: Priority of ENV's
