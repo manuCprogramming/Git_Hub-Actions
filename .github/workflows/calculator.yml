@@ -78,7 +78,7 @@ jobs:
               Substract) expr="$A - $B" ; symbol="-" ;;
               Multiply) expr="$A * $B" ; symbol="*" ;;
               Divide)
-                if ["$(echo "$B ==0" | bc)" -eq 1]; then
+                if [ "$(echo "$B == 0" | bc)" -eq 1 ]; then
                   echo "Error :Division by zero is not allowed" >&2
                   exit 1
                 fi
@@ -87,7 +87,7 @@ jobs:
                  exit 1 ;;
             esac
 
-            results="$(echo expr | bc -l)"
+            results="$(echo "$expr" | bc -l)"
             echo "expression=$A $symbol $B" >> "$GITHUB_OUTPUT"
             echo "result=$results" >> "$GITHUB_OUTPUT"
         
