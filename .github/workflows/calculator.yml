@@ -82,7 +82,7 @@ jobs:
                   echo "Error :Division by zero is not allowed" >&2
                   exit 1
                 fi
-                expr = "$A / $B" symbol="/" ;;
+                expr = "$A / $B" ; symbol="/" ;;
               *) echo "Unsupported opertion: $op" >&2;
                  exit 1 ;;
             esac
