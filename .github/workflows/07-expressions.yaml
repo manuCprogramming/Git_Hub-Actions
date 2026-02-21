@@ -1,0 +1,25 @@
+name: Expression_Workflow
+run-name: 07-Expressions | DEBUG - ${{inputs.debug && 'ON' || 'OFF' }}
+
+env:
+    MY_VAR_WITH_DEFAULTS: ${{ vars.MY_VAR || 'default_value' }}
+on:
+    workflow_dispatch:
+        inputs:
+            debug:
+                type: boolean
+                default: false
+
+jobs:
+    echo:
+        runs-on: ubuntu-latest
+        steps:
+            - name: "[debug] print start-up data"
+              if: ${{inputs.debug}} 
+              run: |
+                echo -e "triggered by :${{github.event_name}}\n Branch: ${{github.ref}}\n Commit SHA: ${{github.sha}}\n Runner OS: ${{runner.os}}"
+            - name: "[debug] Print when triggered from main"
+              if: ${{inputs.debug && github.ref=='refs/heads/main'}}
+              run: echo "I waas triggere from main"
+            - name: "Greeting"
+              run: echo "Thank you for running this ${{github.workflow}}  WorkFlow"

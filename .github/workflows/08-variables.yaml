@@ -1,0 +1,68 @@
+name: 08 - Using Variables
+
+on:
+  workflow_dispatch:
+
+env:
+  WORKFLOW_VAR: 'I am a workflow env var'
+  OVERWRITTEN:  'I will be overwritten'
+
+jobs:
+  echo:
+    runs-on: ubuntu-24.04
+    env:
+      JOB_VAR: 'I am a job env var'
+      OVERWRITTEN: 'I have been overwritten at the job level'
+    steps:
+      - name: Print Env Variables (Step-level and precedence)
+        env:
+          STEP_VAR: 'I am a step env var'
+          step_var2: 'I am another step var'
+        run: |
+          echo "---- Step-level env ----"
+          echo "STEP_VAR (shell): $STEP_VAR"
+          echo "step_var2 (shell): $step_var2"
+          echo "STEP_VAR (expression): ${{ env.STEP_VAR }}"
+          echo "step_var2 (expression): ${{ env.step_var2 }}"
+
+          echo "---- Job-level env ----"
+          echo "JOB_VAR (shell): $JOB_VAR"
+          echo "JOB_VAR (expression): ${{ env.JOB_VAR }}"
+
+          echo "---- Workflow-level env ----"
+          echo "WORKFLOW_VAR (shell): $WORKFLOW_VAR"
+          echo "WORKFLOW_VAR (expression): ${{ env.WORKFLOW_VAR }}"
+
+          echo "---- Overwrite chain (workflow -> job -> step) ----"
+          echo "OVERWRITTEN effective (shell): $OVERWRITTEN"
+          echo "OVERWRITTEN effective (expression): ${{ env.OVERWRITTEN }}"
+
+      - name: Overwrite at the step level
+        env:
+          OVERWRITTEN: 'I have been overwritten at the step level'
+        run: |
+          echo "OVERWRITTEN after step-level override (shell): $OVERWRITTEN"
+          echo "OVERWRITTEN after step-level override (expression): ${{ env.OVERWRITTEN }}"
+
+  echo_Variables:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Print Variables
+        run: | 
+          echo "${{vars.MY_VAR}}"
+          echo "${{vars.REPOSITORY_VAR}}"
+  echo_Prod:
+    runs-on: ubuntu-22.04
+    environment: prod
+    steps:
+      - name: Print values
+        run: |
+          echo "${{vars.MY_VAR}}"
+          echo "${{vars.REPOSITORY_VAR}}"
+          echo "${{vars.TARGET_VAR}}"
+          echo "${{vars.STAGING_VAR || 'nostaging Variable at prod environment'}}"
+          
+
+          
+    
+        

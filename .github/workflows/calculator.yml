@@ -1,8 +1,44 @@
 name: Calculator
 on:
-    push
+    push:
+    workflow_dispatch:
+        inputs:
+          A:
+            type: number
+            default: 4
+          B:
+            type: number
+            default: 5
+          Operation:
+            type: choice
+            options:
+              - Add
+              - Substract
+              - Multiply
+              - Divide
+            default: Add
+            required: true
+          Light:
+            type: choice
+            options:
+              - Red
+              - Yellow
+              - Green
+              - BlinkingYellow
+              - BlinkingRed
+          TimeOfDay:
+            type: choice
+            options:
+              - Day
+              - Night
+           
+            
+          
+
+
 
 jobs:
+
     defineValues:
         runs-on: ubuntu-latest
         outputs:
@@ -40,3 +76,111 @@ jobs:
         - name: UseCandD
           run: |
             echo $((${{needs.defineValues.outputs.C}}/${{needs.defineValues.outputs.D}}))
+    Compute:
+      runs-on: ubuntu-latest
+      
+      steps:
+        - name: compute
+          id: calci
+          shell: bash
+          run: |
+            A="${{inputs.A}}"
+            B="${{inputs.B}}"
+            op="${{inputs.Operation}}"
+
+            case "$op" in
+              Add)    expr="$A + $B" ; symbol="+" ;;
+              Substract) expr="$A - $B" ; symbol="-" ;;
+              Multiply) expr="$A * $B" ; symbol="*" ;;
+              Divide)
+                if [ "$(echo "$B == 0" | bc)" -eq 1 ]; then
+                  echo "Error :Division by zero is not allowed" >&2
+                  exit 1
+                fi
+                expr = "$A / $B" ; symbol="/" ;;
+              *) echo "Unsupported opertion: $op" >&2;
+                 exit 1 ;;
+            esac
+
+            results="$(echo "$expr" | bc -l)"
+            echo "expression=$A $symbol $B" >> "$GITHUB_OUTPUT"
+            echo "result=$results" >> "$GITHUB_OUTPUT"
+        
+        - name: print Result
+          run: |
+            echo "Expression: ${{steps.calci.outputs.expression}}"
+            echo "Result: ${{steps.calci.outputs.result}}"
+        
+        - name: Traffic Signals
+          env:
+            Action: "NoAction"
+            Severity: "Normal"
+            Note: "empty"
+          shell: bash
+          run: |
+            
+            Light="${{ inputs.Light }}"
+            TimeOfDay="${{ inputs.TimeOfDay }}"
+
+
+            if [ "$Light" = "Red" ]; then
+              Action="Stop"
+              Severity="High"
+              Note="Come to a complete stop."
+
+            elif [ "$Light" = "Yellow" ]; then
+              Action="Caution"
+              Severity="Medium"
+              Note="Prepare to stop; proceed carefully."
+
+            elif [ "$Light" = "Green" ]; then
+              Action="Go"
+              Severity="Low"
+              Note="Proceed if the way is clear."
+
+            elif [ "$Light" = "BlinkingYellow" ]; then
+              Action="Caution"
+              Severity="Medium"
+              Note="Proceed carefully; blinking caution."
+
+            elif [ "$Light" = "BlinkingRed" ]; then
+              Action="StopThenGo"
+              Severity="High"
+              Note="Treat as STOP: full stop, then proceed when safe."
+
+            else
+              echo "Unsupported Light Value: '$Light'" >&2
+              exit 1
+            fi
+
+        
+            if [ "$TimeOfDay" = "Night" ]; then
+              # Append to note
+              Note="$Note Visibility reduced at night."
+
+            
+              if [ "$Light" = "Green" ] && [ "$Severity" = "Low" ]; then
+                Severity="Medium"
+              fi
+
+              # OR example: For Red or BlinkingRed at Night, emphasize extra caution
+              if [ "$Light" = "Red" ] || [ "$Light" = "BlinkingRed" ]; then
+                Note="$Note Double-check cross traffic and pedestrians."
+              fi
+            elif [ "$TimeOfDay" != "Day" ]; then
+              echo "Unsupported TimeOfDay: '$TimeOfDay' (expected 'Day' or 'Night')" >&2
+              exit 1
+            fi
+
+            # Export to subsequent steps in the same job
+            echo "Action=$Action"     >> "$GITHUB_ENV"
+            echo "Severity=$Severity" >> "$GITHUB_ENV"
+            echo "Note=$Note"         >> "$GITHUB_ENV"
+
+        - name: Instruction To Driver
+          shell: bash
+          run: |
+            echo "Life is precious."
+            echo "Action:   $Action"
+            echo "Severity: $Severity"
+            echo "Note:     $Note"
