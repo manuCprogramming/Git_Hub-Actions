@@ -1,6 +1,5 @@
 name: Calculator
 on:
-    push:
     workflow_dispatch:
         inputs:
           A:
