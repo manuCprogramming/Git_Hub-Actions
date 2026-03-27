@@ -35,3 +35,22 @@ jobs:
               sleep 10
           - name: Upload test result
             run: echo "Uploading files...!"
+    
+    Experiment_On_include_Key:
+      
+      name: Planting-${{matrix.plant}}-In-${{matrix.areas}}
+      runs-on: windows-2022
+      strategy:
+        fail-fast: false
+        matrix:
+          plant:
+            - lily
+            - rose
+          color: ['red','white']
+          areas: ['office','home']
+          include:
+            - plant: lotus
+              color: pink
+            
+
+
