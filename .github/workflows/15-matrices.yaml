@@ -50,6 +50,8 @@ jobs:
           include:
             - plant: lotus
               color: pink
-            
+      steps:
+        - name: Plantation House
+          run: echo "Planted tree ${{matrix.plant}}-In-${{matrix.areas}}"
 
 
