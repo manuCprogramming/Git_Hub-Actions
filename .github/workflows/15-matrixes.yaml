@@ -7,16 +7,31 @@ jobs:
         name: ${{matrix.OS}}-installing-${{matrix.Node_Version}}
         runs-on: ${{matrix.OS}}
         strategy:
+          fail-fast: false
           matrix:
             Node_Version: [20,18]
             OS: 
                 - ubuntu-latest
                 - windows-latest
+            include:
+              - OS: ubuntu-latest
+                Node_Version: 16.x
+              - OS: ubuntu-latest
+                Node_Version: 20
+                tag: experimental             
         steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
+
+
           - name: Setup Node
             uses: actions/setup-node@v4
             with:
                 node-version: ${{matrix.Node_Version}}
-            
+          - name: Fail if experimental
+            if: matrix.tag == 'experimental'
+            run: exit 1
+          - name: Perform some tasks
+            run: |
+              echo "running test on os ${{matrix.OS}} with Node Version: ${{matrix.Node_Version}}"
+              sleep 10
+          - name: Upload test result
+            run: echo "Uploading files...!"
