@@ -37,7 +37,7 @@ jobs:
             run: echo "Uploading files...!"
   
     IncludesKey:
-      name: Planting-${{matrix.plant}}-In-${{matrix.areas}}
+      name: Planting-${{matrix.plant}}-In-${{matrix.areas}}-with-${{matrix.color}}
       runs-on: windows-2022
       strategy:
         fail-fast: false
@@ -52,6 +52,6 @@ jobs:
               color: pink
       steps:
         - name: Plantation House
-          run: echo "Planted tree ${{matrix.plant}}-In-${{matrix.areas}}"
+          run: echo "Planted tree ${{matrix.plant}}-In-${{matrix.areas}} with ${{matrix.color}}"
 
 
