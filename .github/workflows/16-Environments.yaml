@@ -4,15 +4,16 @@ on:
     inputs:
       target_env:
         type: environment
+
 jobs:
   Deploying:
     runs-on: ubuntu-latest
-    name: Deploying-In-${{vars.MY_ENV_VALUE}}-Area
+    name: Deploying-In-${{inputs.target_env}}-Area
     environment: ${{inputs.target_env}}
     env:
       myENV: ${{vars.MY_ENV_VALUE}}
     steps:
       - name: BuildCode
         run: |
-          echo: "Using ${{env.myENV}} value in ${{inputs.target_env}} Environmnet. "
+          echo "Using ${{env.myENV}} value in ${{inputs.target_env}} Environmnet. "
     
