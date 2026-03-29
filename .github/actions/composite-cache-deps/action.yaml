@@ -1,0 +1,45 @@
+name: Install Node and Its Dependecies
+description: UseIt
+
+inputs:
+  working_dir:
+    description: Provide Working Directory Of Project to cache node files
+    default: .
+  nodever:
+    description: Provide Node Version To Install
+    default: 20.x
+    required: false
+
+
+
+outputs:
+  cache-key:
+    description: Computed cache key for node_modules
+    value: ${{steps.CCompute.outputs.ckey}}
+runs:
+ 
+  using: composite
+
+  steps:
+    - name: ComputeCacheKey
+      id: CCompute
+      shell: bash
+      run: |
+        echo "ckey=${{hashFiles(format('{0}/package-lock.json',inputs.working_dir))}}" >> "$GITHUB_OUTPUT"
+
+    - name: Node Setup
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{inputs.nodever}}
+      
+    - name: Download from Cache
+      uses: actions/cache@v4
+      with:
+        path: ${{inputs.working_dir}}/node_modules
+        key: ${{steps.CCompute.outputs.cache-key }}
+    - name: Download DependeciesIfNOCache
+      working-directory:  ${{inputs.working_dir}}
+      run: npm ci
+      shell: bash
+
+  

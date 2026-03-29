@@ -1,0 +1,24 @@
+name: Use_CompositeActions
+on:
+    workflow_dispatch:
+env: 
+    working-directory: 13-caching/react-app
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+              working-directory: ${{env.working-directory}}
+        steps:
+          - uses: actions/checkout@v4
+          - name: Setup Node and Dependencies
+            uses: ./.github/actions/composite-cache-deps
+            with:
+                working_dir: ${{env.working-directory}}
+                nodever: '18.x'
+          - name: Test
+            run: npm run test
+          - name: Build
+            run: npm run build
+          
+  
