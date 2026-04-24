@@ -16,12 +16,12 @@ on:
             working-directory:
                 description: The wokring directory to check for dependecies updates
                 default: 13-caching\react-app
-            gh-token:
-                description: the token to raise PR 
-                required: true
-            debug-msg:
-                description: to show the log messages
-                default: 'false'
+            # gh-token:
+            #     description: the token to raise PR 
+            #     required: true
+            # debug-msg:
+            #     description: to show the log messages
+            #     default: 'false'
   
 jobs:
     dependecy-update:
