@@ -1,6 +1,25 @@
 name: Update NPM Dependecies
 description: Check if there are updates to NPM packages, and create a PR with the updated package*.json files
-
+inputs:
+  base-branch:
+    description: The base branch used to check dependecies update
+    default: main
+    required: false
+  
+  target-branch:
+    description: The Branch where we raise PR for
+    default: update-dependecies
+    required: false  
+  working-directory:
+    description: The wokring directory to check for dependecies updates
+  gh-token:
+    description: the token to raise PR 
+    required: true
+  debug-msg:
+    description: to show the log messages
+    default: 'false'
+  
+  
 runs:
   using: node24
   main: index.js

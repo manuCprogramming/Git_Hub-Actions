@@ -1,7 +1,28 @@
 name: Use_Custom_JS_Actions
 on:
     workflow_dispatch:
+        inputs:
+            base-branch:
+                type: string
+                description: The base branch used to check dependecies update
+                default: main
+                required: false
+            
+            target-branch:
+                type: string
+                description: The Branch where we raise PR for
+                required: false 
 
+            working-directory:
+                description: The wokring directory to check for dependecies updates
+                default: 13-caching\react-app
+            gh-token:
+                description: the token to raise PR 
+                required: true
+            debug-msg:
+                description: to show the log messages
+                default: 'false'
+  
 jobs:
     dependecy-update:
         runs-on: ubuntu-latest    
@@ -9,6 +30,14 @@ jobs:
           - uses: actions/checkout@v4
           - name: Check for dependency update
             uses: ./.github/actions/js-dependency-update
+            with:
+               base-branch: ${{inputs.base-branch}} 
+               target-branch: ${{inputs.target-branch}}
+               working-directory: ${{inputs.working-directory}}
+            #    gh-token: ${{inputs.gh-token}}
+            #    debug-msg: ${{inputs.debug-msg}}
+
+
       
           
   
