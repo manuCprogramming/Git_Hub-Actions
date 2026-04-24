@@ -21,6 +21,7 @@ const directoryName= ({workdir}) => /^[a-zA-Z0-9_\-\.\/]+$/.test(workdir);
     
     if(!validateBranchName({ branchName: targetBranch } ))
     {
+        
         core.setFailed('Target barnch name is Invalid...!');
         return;
     }
