@@ -9,11 +9,14 @@ const directoryName= ({workdir}) => /^[a-zA-Z0-9_\-\.\/]+$/.test(workdir);
 (async function run()
 {
     const  baseBranch= core.getInput('base-branch');
+    
     const targetBranch=core.getInput('target-branch');
     const workingDirectory=core.getInput('working-directory');
     const gitToken=core.getInput('gh-token');
     const isDebug=core.getBooleanInput('debug-msg');
-    core.setSecret(gitToken);
+    if(gitToken) {
+        core.setSecret(gitToken);
+    }
     if(!validateBranchName({ branchName: baseBranch} ))
     {
         core.error('Branch name is Invalid...!')
@@ -21,7 +24,7 @@ const directoryName= ({workdir}) => /^[a-zA-Z0-9_\-\.\/]+$/.test(workdir);
     
     if(!validateBranchName({ branchName: targetBranch } ))
     {
-        
+
         core.setFailed('Target barnch name is Invalid...!');
         return;
     }
