@@ -1,0 +1,17 @@
+name : Docker Custom Action
+description: Ping url until maximum trails have exceeded. If result is not 200 until then ,fails the actions
+
+inputs:
+  url: 
+    description: URL to ping
+    required: true
+  max_trails:
+    description: Max number of trails until actions fails
+    default: '10'
+    required: false
+  delay:
+    description: Delay in seconds between trails
+runs:
+  using: docker
+  image: Dockerfile
+  
