@@ -11,6 +11,8 @@ inputs:
     required: false
   delay:
     description: Delay in seconds between trails
+    default: '5'
+    required: false
 runs:
   using: docker
   image: Dockerfile
