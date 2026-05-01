@@ -1,0 +1,21 @@
+name : Caller Workflow
+on:
+    workflow_dispatch:
+
+
+jobs:
+  Deploy-QA:
+    uses: ./.github/workflows/18-1-reusable-workflows.yaml
+    with:
+        target-directory: 'dummy-dir'
+
+  IsDeploy-QA:
+    needs: Deploy-QA 
+    runs-on : ubuntu-latest
+    steps:
+      - name: echoResult
+        run: |
+            echo "${{needs.Deploy-QA.outputs.build-status}}"
+            echo "${{needs.Deploy-QA.outputs.url}}"
+
+
