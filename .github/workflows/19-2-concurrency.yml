@@ -1,0 +1,33 @@
+name: 19- Managing concurrency At Job Level
+
+on:
+  workflow_dispatch:
+
+jobs:
+    ping-url-with-concurrency:
+        concurrency: 
+          group: ${{github.workflow}}-${{github.head_ref}}
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+          - name: Ping URL
+            uses: ./.github/actions/docker-ping-url
+            with: 
+                url : 'https://www.googletr.com'
+                max_trails: 20
+                delay: 5
+    ping-url-without-concurrency:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+          - name: Ping URL
+            uses: ./.github/actions/docker-ping-url
+            with: 
+                url : 'https://www.googletr.com'
+                max_trails: 20
+                delay: 5
+                
+              
+  
