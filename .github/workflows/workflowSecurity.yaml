@@ -4,11 +4,13 @@ on:
 jobs:
   checkPR:
     runs-on: ubuntu-latest
+    env:
+       title: ${{ github.event.pull_request.title }}
     steps:
       - uses: actions/checkout@v4
       - name: Check If the PR is feature branch
         run: |
-          title=${{ github.event.pull_request.title }}
+          
           if [[ $title =~ ^feat ]]; then
           echo "PR is a feature "
           exit 0
