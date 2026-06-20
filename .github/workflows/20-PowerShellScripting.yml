@@ -1,0 +1,40 @@
+name: PowerShell REST API cmdlet Learning
+on:
+  workflow_dispatch:
+    inputs:
+      Choose_cmdlet:
+        type: choice
+        options:
+          - usecurl
+          - usewebrequest
+          - userestmethod
+
+jobs:
+  CallAPI:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4  
+      - name : CallAPI_Using_User_Choice_curl
+        if: ${{ github.event.inputs.Choose_cmdlet == 'usecurl' }}
+        shell: pwsh
+        run: |
+          $response = curl -Uri "https://jsonplaceholder.typicode.com/posts/1" -Method GET
+          Write-Host $response.title
+
+      - name: CallAPI_Using_User_Choice_webrequest
+        if: ${{ github.event.inputs.Choose_cmdlet == 'usewebrequest' }}
+        shell: pwsh
+        run: |
+          $response= Invoke-WebRequest -Uri "https://jsonplaceholder.typicode.com/posts/1"
+          Write-Host $response.StatusCode
+      - name: CallAPI_Using_User_Choice_restmethod
+        if: ${{ github.event.inputs.Choose_cmdlet == 'userestmethod' }}
+        shell: pwsh
+        run: |
+          $response = Invoke-RestMethod -Uri "https://jsonplaceholder.typicode.com/posts/1"
+          Write-Host $response.title
+        
+
+        
+          
+        
