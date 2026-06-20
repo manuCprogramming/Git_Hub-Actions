@@ -19,7 +19,9 @@ jobs:
         shell: pwsh
         run: |
           $response = curl -Uri "https://jsonplaceholder.typicode.com/posts/1" -Method GET
-          Write-Host $response.title
+          $data = $response.Content | ConvertFrom-Json
+          Write-Host $data.title
+
 
       - name: CallAPI_Using_User_Choice_webrequest
         if: ${{ github.event.inputs.Choose_cmdlet == 'usewebrequest' }}
